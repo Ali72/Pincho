@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Pincho</string>
+    <string name="problem_on_load_data">Problem on load Data</string>
+</resources>
