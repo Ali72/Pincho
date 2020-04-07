@@ -8,29 +8,12 @@ import java.util.List;
 
 public class Repository implements RepoMethod {
 
-    private static Repository INSTANCE;
 //    private final LocalRepository localSource;
     private RemoteRepository remoteSource;
-//    private AppExecutors executors = new AppExecutors();
 
-    public static Repository getInstance() {
-        if (INSTANCE == null) {
-            synchronized (Repository.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new Repository();
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
-    private Repository() {
-        this.remoteSource = RemoteRepository.getInstance();
+    public Repository(RemoteRepository remoteSource) {
+        this.remoteSource = remoteSource;
 //        this.localSource = LocalRepository.getInstance();
-        init();
-    }
-
-    private void init() {
     }
 
 

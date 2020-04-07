@@ -8,5 +8,9 @@ public interface MvpViewActivity<T> extends MvpView<T> {
 
     void hideErrorView();
 
+    void showProgressView();
+
+    void hideProgressView();
+
     void setOnRetryBtnClicked(View.OnClickListener onRetryBtnClicked);
 }

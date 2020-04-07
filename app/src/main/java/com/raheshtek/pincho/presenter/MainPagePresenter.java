@@ -21,13 +21,14 @@ public class MainPagePresenter<V extends MVPMainPageView>
 
     @Override
     public void requestLoadData() {
-        Repository.getInstance().getPhotos(new CallBack<List<Photo>>() {
+        getMvpView().showProgressView();
+        getRepository().getPhotos(new CallBack<List<Photo>>() {
             @Override
             public void onSuccess(List<Photo> result) {
                 super.onSuccess(result);
                 if (getMvpView() == null) return;
                 getMvpView().onDataLoaded(result);
-                getMvpView().hideErrorView();
+                getMvpView().hideProgressView();
             }
 
             @Override

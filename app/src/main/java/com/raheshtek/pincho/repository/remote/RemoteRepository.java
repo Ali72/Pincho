@@ -15,23 +15,11 @@ import retrofit2.Response;
 
 public class RemoteRepository implements RemoteSource {
 
-    private static RemoteRepository INSTANCE;
     private ApiConnection apiConnection;
     private static final String TAG = RemoteRepository.class.getName();
 
-    public static RemoteRepository getInstance() {
-        if (INSTANCE == null) {
-            synchronized (RemoteRepository.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new RemoteRepository();
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
-    private RemoteRepository() {
-        apiConnection = ApiConnection.getInstance();
+    public RemoteRepository(ApiConnection apiConnection) {
+        this.apiConnection = apiConnection;
     }
 
 

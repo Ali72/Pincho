@@ -1,25 +1,20 @@
-package com.raheshtek.pincho.module;
+package com.raheshtek.pincho.di.module;
 
-
-import android.app.Activity;
 
 import com.raheshtek.pincho.presenter.MVPMainPagePresenter;
 import com.raheshtek.pincho.presenter.MainPagePresenter;
 import com.raheshtek.pincho.view.MVPMainPageView;
 import com.raheshtek.pincho.view.MainPagerAdapter;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import dagger.Module;
 import dagger.Provides;
 
 @Module
-public
-class AppModule {
+public class MainPageModule {
 
     private MVPMainPageView mvpMainPageView;
 
-    public AppModule(MVPMainPageView mvpMainPageView) {
+    public MainPageModule(MVPMainPageView mvpMainPageView) {
         this.mvpMainPageView = mvpMainPageView;
     }
 

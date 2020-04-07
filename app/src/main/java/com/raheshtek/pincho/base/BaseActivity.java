@@ -1,48 +1,26 @@
 package com.raheshtek.pincho.base;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.raheshtek.pincho.R;
 import com.raheshtek.pincho.app.G;
-import com.raheshtek.pincho.model.Photo;
-import com.raheshtek.pincho.module.AppComponent;
-import com.raheshtek.pincho.module.AppModule;
-import com.raheshtek.pincho.module.DaggerAppComponent;
+import com.raheshtek.pincho.di.component.AppComponent;
 
-
-import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import dagger.android.support.DaggerAppCompatActivity;
 
 
 public abstract class BaseActivity<V extends MvpPresenter>
@@ -51,16 +29,29 @@ public abstract class BaseActivity<V extends MvpPresenter>
     final static String TAG = BaseActivity.class.getName();
     private V presenter;
     private Unbinder unbinder;
-    public G application;
-    private AppComponent appComponent = getComponent();
+
+    @Nullable
+    @BindView(R.id.btn_retry)
+    AppCompatButton retryBtn;
+
+    @Nullable
+    @BindView(R.id.txt_error_message)
+    AppCompatTextView txtErrorMessage;
+
+    @Nullable
+    @BindView(R.id.ll_progress)
+    LinearLayout llProgress;
+    @Nullable
+    @BindView(R.id.ll_retry)
+    LinearLayout llRetry;
 
     @Override
     @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getViewLayoutId());
-        application = (G) this.getApplicationContext();
         unbinder = ButterKnife.bind(this);
+        setupComponent(G.getInstance().component());
         if (presenter != null)
             presenter.onAttach(this);
         else
@@ -68,7 +59,7 @@ public abstract class BaseActivity<V extends MvpPresenter>
         functionView();
     }
 
-    protected abstract AppComponent getComponent();
+    protected abstract void setupComponent(AppComponent appComponent);
 
     @Inject
     public void setPresenter(V presenter) {
@@ -99,16 +90,34 @@ public abstract class BaseActivity<V extends MvpPresenter>
 
     @Override
     public void showError(Exception e) {
-
+        hideProgressView();
+        if (llRetry != null && txtErrorMessage != null) {
+            llRetry.setVisibility(View.VISIBLE);
+            txtErrorMessage.setText(e.getMessage());
+        }
     }
 
     @Override
     public void hideErrorView() {
-
+        if (llRetry != null) llRetry.setVisibility(View.GONE);
     }
 
     @Override
-    public void setOnRetryBtnClicked(View.OnClickListener onRetryBtnClicked) {
+    public void showProgressView() {
+        hideErrorView();
+        if (llProgress != null) llProgress.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    public void hideProgressView() {
+        if (llProgress != null) llProgress.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public void setOnRetryBtnClicked(View.OnClickListener onRetryBtnClicked) {
+        if (retryBtn != null) {
+            retryBtn.setOnClickListener(onRetryBtnClicked);
+        }
     }
 }
